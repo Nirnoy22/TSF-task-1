@@ -1,0 +1,87 @@
+---
+title: "TSF Task 1:Prediction using Supervised ML"
+author: "Nirnoy Ghosh , Data Science & Business Analytics Intern, The Sparks foundation"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## 1. Installtion and calling the required library
+```{r ,message = FALSE}
+#install.packages("readr")
+#install.packages("dplyr")
+library(readr)
+library(dplyr)
+```
+
+## 2. Import the data and print the data.
+```{r}
+data=read.csv("C:/Users/ASUS/OneDrive/Desktop/Nirnoy/Placement/TSF/TSFtask1.csv",header=TRUE)
+data
+```
+
+## 3. Checking the null value
+```{r}
+is.null(data)
+```
+
+### From the output it is clear that there is no null value
+
+## 4. Checking some statistical property.
+```{r}
+summary(data)
+```
+
+## 5. Plot the data to understnd what kind of relationship has between two variables.
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+ggplot(data = data, aes(x= Hours, y = Scores)) +
+  geom_point() +
+  geom_smooth(method= "lm",se = FALSE)
+```
+
+### The above diagram shows us the relationship of our model
+
+## 6. Now we will calculate the coefficients of our model by using the given data.
+
+```{r}
+#Finding the coefficients of the data using linear model
+data_coeff=lm(Scores~Hours, data= data)
+data_coeff
+```
+
+### The model equation will be score= intercept + (hours * time) 
+```{r}
+summary(data_coeff)
+```
+
+
+### Here from the R squared valu we can say that 95.09% of scores can be explained by the study hours.  
+
+## 7. We will calculate the expected or predicted score of the given data.
+
+```{r}
+coef(data_coeff)
+
+data = data %>%
+  mutate(predicted_value=fitted(data_coeff))
+head(data)
+barplot(as.matrix(data),col="light green")
+```
+
+## 8. Calculating the final score.
+```{r}
+score = coef(data_coeff)[[1]]+(coef(data_coeff)[[2]]*9.25)
+score
+```
+
+### If a student studies for 9.25 hrs/ day,predicted score will be 92.91
+
+
+
+
+---
+Thank You
+---
